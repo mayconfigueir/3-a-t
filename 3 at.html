@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Simples</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .calculadora {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 350px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        #display {
+            width: 100%;
+            height: 70px;
+            font-size: 32px;
+            text-align: right;
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: #f9f9f9;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #333;
+            outline: none;
+        }
+
+        .botoes {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            padding: 20px;
+            font-size: 22px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background: #f0f0f0;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .operador {
+            background: #667eea;
+            color: white;
+        }
+
+        .operador:hover {
+            background: #5a6fd6;
+        }
+
+        .igual {
+            background: #764ba2;
+            color: white;
+        }
+
+        .igual:hover {
+            background: #6a3f94;
+        }
+
+        .limpar {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .limpar:hover {
+            background: #e55a5a;
+        }
+
+        .zero {
+            grid-column: span 2;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculadora">
+        <h1>🧮 Calculadora</h1>
+        <input type="text" id="display" readonly>
+
+        <div class="botoes">
+            <button onclick="limpar()" class="limpar">C</button>
+            <button onclick="apagar()" class="limpar">⌫</button>
+            <button onclick="inserir('/')" class="operador">÷</button>
+            <button onclick="inserir('*')" class="operador">×</button>
+
+            <button onclick="inserir('7')">7</button>
+            <button onclick="inserir('8')">8</button>
+            <button onclick="inserir('9')">9</button>
+            <button onclick="inserir('-')" class="operador">−</button>
+
+            <button onclick="inserir('4')">4</button>
+            <button onclick="inserir('5')">5</button>
+            <button onclick="inserir('6')">6</button>
+            <button onclick="inserir('+')" class="operador">+</button>
+
+            <button onclick="inserir('1')">1</button>
+            <button onclick="inserir('2')">2</button>
+            <button onclick="inserir('3')">3</button>
+            <button onclick="calcular()" class="igual">=</button>
+
+            <button onclick="inserir('0')" class="zero">0</button>
+            <button onclick="inserir('.')">.</button>
+        </div>
+
+        <footer>Feito com ❤️ em HTML + CSS + JS</footer>
+    </div>
+
+    <script>
+        const display = document.getElementById('display');
+
+        function inserir(valor) {
+            display.value += valor;
+        }
+
+        function limpar() {
+            display.value = '';
+        }
+
+        function apagar() {
+            display.value = display.value.slice(0, -1);
+        }
+
+        function calcular() {
+            try {
+                let expressao = display.value;
+                // Substitui × por * e ÷ por / para o JS entender
+                expressao = expressao.replace(/×/g, '*').replace(/÷/g, '/');
+                const resultado = eval(expressao);
+                display.value = resultado;
+            } catch (error) {
+                display.value = 'Erro!';
+                setTimeout(() => {
+                    display.value = '';
+                }, 1500);
+            }
+        }
+
+        // Permite digitar pelo teclado também
+        document.addEventListener('keydown', function(event) {
+            const tecla = event.key;
+            if (tecla >= '0' && tecla <= '9' || tecla === '.' || tecla === '+' || tecla === '-' || tecla === '*' || tecla === '/') {
+                inserir(tecla);
+            } else if (tecla === 'Enter') {
+                event.preventDefault();
+                calcular();
+            } else if (tecla === 'Backspace') {
+                apagar();
+            } else if (tecla === 'Escape') {
+                limpar();
+            }
+        });
+    </script>
+
+</body>
+</html>
